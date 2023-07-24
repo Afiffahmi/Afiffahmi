@@ -1,4 +1,4 @@
-<img src="[img_girl.jpg](https://cdn.discordapp.com/attachments/999735726285525165/1133134844310863932/Blue_Modern_Marketing_Ideas_and_Tips_Youtube_Thumbnail.png)" >
+<img src="https://cdn.discordapp.com/attachments/999735726285525165/1133134844310863932/Blue_Modern_Marketing_Ideas_and_Tips_Youtube_Thumbnail.png" >
 
 <h1 align="center">Hi 👋, I'm Afif fahmi</h1>
 <h3 align="center">A passionate mobile apps developer</h3>
