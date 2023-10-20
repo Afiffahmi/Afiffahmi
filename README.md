@@ -21,7 +21,7 @@
 </p>
 
 # 📊 GitHub Stats:
-[![GitHub Streak](https://streak-stats.demolab.com?user=name-iffat&theme=dark&border_radius=7)](https://git.io/streak-stats)<br/>
+[![GitHub Streak](https://streak-stats.demolab.com?user=Afiffahmi&theme=dark&border_radius=7)](https://git.io/streak-stats)<br/>
 ![](https://github-readme-stats.vercel.app/api/top-langs/?username=Afiffahmi&theme=react&hide_border=false&include_all_commits=false&count_private=false&layout=compact)
 
 
