@@ -1,13 +1,13 @@
 <img src="https://cdn.discordapp.com/attachments/999735726285525165/1133134844310863932/Blue_Modern_Marketing_Ideas_and_Tips_Youtube_Thumbnail.png" >
 
 <h1 align="center">Hi 👋, I'm Afif fahmi</h1>
-<h3 align="center">A passionate mobile apps developer</h3>
+<h3 align="center">A passionate web/mobile apps developer</h3>
 
 <p align="left"> <a href="https://twitter.com/kmlhjjz" target="blank"><img src="https://img.shields.io/twitter/follow/kmlhjjz?logo=twitter&style=for-the-badge" alt="kmlhjjz" /></a> </p>
 
 
 
-- 🔭 I’m currently working on [College Project](https://github.com/Afiffahmi/Sales-System)
+- 🔭 I’m currently working on [College Project]
 
 - 🌱 I’m currently learning **Node.js, Flutter, React**
 
@@ -20,7 +20,7 @@
 <a href="https://twitter.com/kmlhjjz" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/twitter.svg" alt="kmlhjjz" height="30" width="40" /></a>
 </p>
 
-# 📊 GitHub Stats:
+<h1 align="center">📊 GitHub Stats:</h1>
 [![GitHub Streak](https://streak-stats.demolab.com?user=Afiffahmi&theme=dark&border_radius=7)](https://git.io/streak-stats)<br/>
 ![](https://github-readme-stats.vercel.app/api/top-langs/?username=Afiffahmi&theme=react&hide_border=false&include_all_commits=false&count_private=false&layout=compact)
 
