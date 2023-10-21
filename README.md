@@ -21,13 +21,6 @@
 </p>
 
 <h1 align="center">📊 GitHub Stats:</h1>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub Stats</title>
-</head>
 <body>
     <div style="text-align: center;">
         <a href="https://git.io/streak-stats">
@@ -35,9 +28,6 @@
         </a>
     </div>
     
-    <div style="text-align: center;">
-        <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Afiffahmi&theme=react&hide_border=false&include_all_commits=false&count_private=false&layout=compact" alt="Top Languages">
-    </div>
 </body>
 </html>
 
