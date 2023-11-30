@@ -13,7 +13,7 @@
 
 - 📫 How to reach me **afif.rafpi@gmail.com**
 
-- ⚡ Fun fact **I have a lot of nickname!**
+- ⚡ Fun fact **I have a lot of nickname!!**
 
 <h3 align="left">Connect with me:</h3>
 <p align="left">
