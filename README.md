@@ -7,7 +7,7 @@
 
 
 
-- 🔭 I’m currently working on [College Project]
+- 🔭 I’m currently working on Final Year Project
 
 - 🌱 I’m currently learning **Node.js, Flutter, React**
 
