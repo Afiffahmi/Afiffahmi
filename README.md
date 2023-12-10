@@ -1,5 +1,4 @@
 <img src="https://cdn.discordapp.com/attachments/999735726285525165/1183212708930265100/Black__Gold_Elegant_Personal_LinkedIn_Banner.png?ex=658783b4&is=65750eb4&hm=7284abbe5604c4a1ff95beb772d74bc09b1c5fa9611b68a2e2275bb76a25cb6f&" >
-<img src="https://cdn.dribbble.com/users/41854/screenshots/2354844/blob_800x600.gif" >
 
 <h1 align="center">Hi 👋, I'm Afif fahmi</h1>
 <h3 align="center">A passionate web/mobile apps developer</h3>
