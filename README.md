@@ -10,9 +10,9 @@
 
 
 
-- 🔭 I’m currently working on Final Year Project
+- 🔭 I’m currently working on React Native
 
-- 🌱 I’m currently learning **Node.js, Flutter, React**
+- 🌱 I’m currently learning **Node.js, Flutter, React, React-Native, NestJS**
 
 - 📫 How to reach me **afif.rafpi@gmail.com**
 
