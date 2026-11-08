@@ -1,0 +1,1046 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Afif Fahmi — Indie Mobile Developer</title>
+<meta name="description" content="Afif Fahmi is an indie mobile developer crafting apps and games with React Native, Flutter, Unity and TypeScript." />
+<meta name="theme-color" content="#fbfbfd" />
+<meta property="og:title" content="Afif Fahmi — Indie Mobile Developer" />
+<meta property="og:description" content="Apps and games, crafted with care. React Native · Flutter · Unity · TypeScript." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231d1d1f'/%3E%3Ctext x='32' y='43' font-family='Helvetica,Arial' font-size='30' font-weight='700' fill='white' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E" />
+<style>
+  :root {
+    --bg: #fbfbfd;
+    --bg-alt: #f5f5f7;
+    --ink: #1d1d1f;
+    --ink-2: #424245;
+    --muted: #6e6e73;
+    --faint: #d2d2d7;
+    --line: rgba(0, 0, 0, .08);
+    --card: #ffffff;
+    --blue: #0071e3;
+    --g1: #0071e3;
+    --g2: #7b5cff;
+    --g3: #ff5c8a;
+    --g4: #ff9f0a;
+    --radius: 28px;
+    --ease: cubic-bezier(.22, 1, .36, 1);
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Helvetica Neue", Arial, sans-serif;
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    line-height: 1.5;
+  }
+  a { color: inherit; text-decoration: none; }
+  img, svg { display: block; }
+  ::selection { background: rgba(0, 113, 227, .18); }
+
+  .grad {
+    background: linear-gradient(100deg, var(--g1) 0%, var(--g2) 35%, var(--g3) 70%, var(--g4) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+
+  /* ---------- Nav ---------- */
+  .nav {
+    position: fixed; inset: 0 0 auto 0; z-index: 50;
+    height: 52px; display: flex; align-items: center; justify-content: center;
+    background: rgba(251, 251, 253, .72);
+    backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid transparent;
+    transition: border-color .4s;
+  }
+  .nav.scrolled { border-color: var(--line); }
+  .nav-inner { width: min(1080px, 100% - 32px); display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-weight: 700; letter-spacing: -.02em; font-size: 17px; }
+  .nav-links { display: flex; gap: 28px; font-size: 13px; color: var(--ink-2); }
+  .nav-links a { transition: color .2s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta {
+    font-size: 13px; font-weight: 500; padding: 6px 14px; border-radius: 999px;
+    background: var(--ink); color: #fff; transition: transform .3s var(--ease), background .3s;
+  }
+  .nav-cta:hover { background: #000; transform: scale(1.04); }
+  .progress { position: absolute; left: 0; bottom: -1px; height: 2px; width: 100%; transform-origin: 0 50%; transform: scaleX(0);
+    background: linear-gradient(90deg, var(--g1), var(--g2), var(--g3)); }
+  @media (max-width: 720px) { .nav-links { display: none; } }
+
+  /* ---------- Generic sticky scenes ---------- */
+  .scene { position: relative; }
+  .sticky { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+
+  /* ---------- Hero + phone scene ---------- */
+  #hero { height: 520vh; }
+  #hero .sticky { display: grid; place-items: center; }
+  .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .55; will-change: transform; pointer-events: none; }
+  .orb.a { width: 46vmax; height: 46vmax; background: #cfe3ff; left: -12vmax; top: -10vmax; }
+  .orb.b { width: 40vmax; height: 40vmax; background: #e6dcff; right: -12vmax; top: 10vmax; }
+  .orb.c { width: 34vmax; height: 34vmax; background: #ffe0ea; left: 25vw; bottom: -18vmax; }
+
+  .hero-copy { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; padding: 0 16px; will-change: transform, opacity, filter; }
+  .eyebrow { font-size: clamp(15px, 1.6vw, 21px); font-weight: 600; color: var(--muted); letter-spacing: -.01em; margin-bottom: 14px; }
+  .eyebrow .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #34c759; margin-right: 8px; vertical-align: middle; box-shadow: 0 0 0 0 rgba(52,199,89,.6); animation: ping 2s infinite; }
+  @keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(52,199,89,.5); } 80%,100% { box-shadow: 0 0 0 12px rgba(52,199,89,0); } }
+  .hero-title { font-size: clamp(64px, 14vw, 200px); font-weight: 800; letter-spacing: -.055em; line-height: .92; }
+  .hero-title span { display: inline-block; opacity: 0; transform: translateY(40px); filter: blur(12px); animation: rise 1.2s var(--ease) forwards; }
+  .hero-title span:nth-child(2) { animation-delay: .12s; }
+  .hero-sub, .eyebrow { text-shadow: 0 0 18px rgba(255,255,255,.9), 0 0 4px rgba(255,255,255,.8); }
+  .hero-sub { margin-top: 26px; font-size: clamp(19px, 2.4vw, 30px); font-weight: 500; color: var(--ink-2); letter-spacing: -.02em; opacity: 0; animation: rise 1.2s .35s var(--ease) forwards; }
+  @keyframes rise { to { opacity: 1; transform: none; filter: none; } }
+  .scroll-hint { position: absolute; bottom: 34px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 10px; opacity: 0; animation: rise 1s 1s var(--ease) forwards; }
+  .scroll-hint i { width: 22px; height: 36px; border: 1.5px solid var(--faint); border-radius: 12px; position: relative; }
+  .scroll-hint i::after { content: ""; position: absolute; left: 50%; top: 7px; width: 3px; height: 7px; margin-left: -1.5px; border-radius: 2px; background: var(--muted); animation: wheel 1.6s infinite; }
+  @keyframes wheel { 0% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(12px); } }
+
+  .stage { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; perspective: 1200px; }
+  .phone-wrap { will-change: transform; transform: translateY(110vh); }
+  .phone {
+    width: clamp(230px, 24vw, 310px); aspect-ratio: 9 / 19.5; border-radius: 52px; position: relative;
+    background: #1d1d1f; padding: 11px;
+    box-shadow: 0 0 0 2px #3a3a3c inset, 0 50px 100px -20px rgba(30, 40, 90, .35), 0 30px 60px -30px rgba(0,0,0,.4);
+  }
+  .phone::before { content: ""; position: absolute; right: -3px; top: 22%; width: 3px; height: 14%; border-radius: 0 3px 3px 0; background: #2c2c2e; }
+  .screen { position: relative; width: 100%; height: 100%; border-radius: 42px; overflow: hidden; background: #fff; }
+  .island { position: absolute; top: 11px; left: 50%; transform: translateX(-50%); width: 32%; height: 26px; background: #000; border-radius: 20px; z-index: 5; }
+  .app { position: absolute; inset: 0; padding: 52px 16px 16px; opacity: 0; transform: scale(1.06); transition: opacity .7s var(--ease), transform .9s var(--ease); font-size: 11px; }
+  .app.on { opacity: 1; transform: none; }
+  .statusbar { position: absolute; top: 15px; left: 26px; right: 26px; display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; z-index: 4; }
+
+  /* app 1 — meetings */
+  .app1 { background: linear-gradient(180deg, #f2f6ff, #fff 45%); color: var(--ink); }
+  .app1 h4 { font-size: 22px; letter-spacing: -.03em; margin: 6px 0 12px; }
+  .days { display: flex; justify-content: space-between; margin-bottom: 14px; }
+  .days b { width: 30px; height: 44px; border-radius: 12px; display: grid; place-content: center; text-align: center; font-size: 10px; font-weight: 500; color: var(--muted); line-height: 1.3; }
+  .days b.sel { background: var(--blue); color: #fff; }
+  .meet { background: #fff; border-radius: 16px; padding: 12px; margin-bottom: 9px; box-shadow: 0 4px 16px rgba(0,40,120,.07); border-left: 4px solid var(--c, var(--blue)); }
+  .meet strong { display: block; font-size: 12px; margin-bottom: 2px; }
+  .meet span { color: var(--muted); font-size: 10px; }
+  .avatars { display: flex; margin-top: 8px; }
+  .avatars i { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #fff; margin-left: -5px; background: var(--c, #9ac); }
+  .avatars i:first-child { margin-left: 0; }
+
+  /* app 2 — game */
+  .app2 { background: radial-gradient(120% 70% at 50% 100%, #ff8a3d 0%, #b3365c 35%, #2b1645 70%, #120b22 100%); color: #fff; padding-top: 48px; }
+  .hud { display: flex; flex-direction: column; gap: 5px; }
+  .bar { height: 6px; border-radius: 3px; background: rgba(255,255,255,.18); overflow: hidden; }
+  .bar i { display: block; height: 100%; border-radius: 3px; }
+  .bar.hp i { width: 72%; background: linear-gradient(90deg, #ff3b30, #ff6b5e); }
+  .bar.st i { width: 48%; background: linear-gradient(90deg, #34c759, #a8f0b6); }
+  .mountains { position: absolute; left: 0; right: 0; bottom: 0; height: 55%; }
+  .hero-sil { position: absolute; left: 50%; bottom: 25%; transform: translateX(-50%); width: 22px; height: 54px; background: #0b0614; border-radius: 10px 10px 3px 3px; }
+  .hero-sil::before { content: ""; position: absolute; width: 4px; height: 46px; background: #e8e2ff; right: -9px; top: -18px; border-radius: 2px; transform: rotate(18deg); box-shadow: 0 0 12px #c9b8ff; }
+  .boss { position: absolute; right: 12%; bottom: 25%; width: 70px; height: 96px; background: #0b0614; border-radius: 40px 40px 6px 6px; }
+  .boss::before, .boss::after { content: ""; position: absolute; top: 26px; width: 7px; height: 4px; background: #ff453a; border-radius: 2px; box-shadow: 0 0 10px #ff453a; }
+  .boss::before { left: 20px; } .boss::after { right: 20px; }
+  .joy { position: absolute; bottom: 22px; left: 20px; width: 62px; height: 62px; border-radius: 50%; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25); }
+  .joy::after { content: ""; position: absolute; inset: 18px; border-radius: 50%; background: rgba(255,255,255,.55); }
+  .btns { position: absolute; bottom: 24px; right: 18px; display: flex; gap: 8px; }
+  .btns i { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.3); }
+  .boss-name { position: absolute; left: 16px; right: 16px; top: 46%; text-align: center; font-family: Georgia, serif; letter-spacing: .25em; font-size: 10px; opacity: .8; }
+
+  /* app 3 — agreement */
+  .app3 { background: #f5f5f7; }
+  .doc { background: #fff; border-radius: 18px; padding: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.06); }
+  .doc h5 { font-size: 15px; letter-spacing: -.02em; margin-bottom: 10px; }
+  .ln { height: 6px; border-radius: 3px; background: #ececf0; margin-bottom: 7px; }
+  .sig { margin-top: 16px; border-top: 1px dashed var(--faint); padding-top: 10px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .sig svg { width: 110px; height: 40px; }
+  .sig svg path { stroke-dasharray: 260; stroke-dashoffset: 260; }
+  .app3.on .sig svg path { animation: draw 1.6s .4s var(--ease) forwards; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  .chip { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 600; padding: 4px 9px; border-radius: 99px; background: #e8f8ec; color: #1f8a3b; }
+  .signbtn { margin-top: 14px; text-align: center; padding: 12px; border-radius: 14px; background: var(--ink); color: #fff; font-weight: 600; font-size: 12px; }
+
+  /* app 4 — dashboard */
+  .app4 { background: #fff; }
+  .app4 h4 { font-size: 22px; letter-spacing: -.03em; margin: 6px 0 2px; }
+  .kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
+  .kpi { border-radius: 16px; padding: 12px; background: #f5f5f7; }
+  .kpi b { display: block; font-size: 18px; letter-spacing: -.03em; }
+  .kpi span { font-size: 10px; color: var(--muted); }
+  .chart { height: 120px; border-radius: 16px; background: #f5f5f7; padding: 12px; display: flex; align-items: flex-end; gap: 6px; }
+  .chart i { flex: 1; border-radius: 6px 6px 3px 3px; background: linear-gradient(180deg, var(--g2), var(--g1)); height: 0; transition: height 1s var(--ease); }
+  .app4.on .chart i { height: var(--h); }
+  .chart i:nth-child(2) { transition-delay: .05s } .chart i:nth-child(3) { transition-delay: .1s } .chart i:nth-child(4) { transition-delay: .15s }
+  .chart i:nth-child(5) { transition-delay: .2s } .chart i:nth-child(6) { transition-delay: .25s } .chart i:nth-child(7) { transition-delay: .3s }
+
+  .captions { position: absolute; inset: 0; pointer-events: none; }
+  .cap {
+    position: absolute; top: 50%; width: min(360px, 32vw); opacity: 0; transform: translateY(-50%) translateY(30px);
+    transition: opacity .7s var(--ease), transform .9s var(--ease);
+  }
+  .cap.left { left: max(4vw, calc(50% - 560px)); text-align: left; }
+  .cap.right { right: max(4vw, calc(50% - 560px)); text-align: left; }
+  .cap.on { opacity: 1; transform: translateY(-50%); }
+  .cap .k { font-size: 14px; font-weight: 600; margin-bottom: 10px; display: inline-block; }
+  .cap h3 { font-size: clamp(30px, 3.4vw, 48px); line-height: 1.05; letter-spacing: -.035em; font-weight: 700; }
+  .cap p { margin-top: 14px; color: var(--muted); font-size: 17px; line-height: 1.5; }
+  .dots { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; opacity: 0; transition: opacity .5s; }
+  .dots.on { opacity: 1; }
+  .dots i { width: 8px; height: 8px; border-radius: 99px; background: var(--faint); transition: width .5s var(--ease), background .5s; }
+  .dots i.on { width: 26px; background: var(--ink); }
+  @media (max-width: 860px) {
+    .phone { width: min(56vw, 250px); }
+    .stage { place-items: start center; padding-top: 11vh; }
+    .cap { top: auto; bottom: 9vh; left: 16px !important; right: 16px !important; width: auto; text-align: center !important; transform: translateY(30px); }
+    .cap.on { transform: none; }
+    .cap p { font-size: 15px; margin-top: 8px; }
+    .cap h3 { font-size: 28px; }
+    .dots { bottom: 3vh; }
+  }
+
+  /* ---------- Statement (word reveal) ---------- */
+  #statement { height: 300vh; background: var(--bg); }
+  #statement .sticky { display: grid; place-items: center; padding: 0 16px; }
+  .statement {
+    width: min(1000px, 100%); font-size: clamp(32px, 5.6vw, 72px); font-weight: 700; letter-spacing: -.04em; line-height: 1.1;
+  }
+  .statement .w { color: var(--ink); opacity: .12; transition: opacity .25s linear; }
+  .statement .w.hl { background: linear-gradient(100deg, var(--g1), var(--g2), var(--g3)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+  /* ---------- Section headers ---------- */
+  .section-head { width: min(1080px, 100% - 32px); margin: 0 auto; }
+  .section-head .k { font-size: 17px; font-weight: 600; color: var(--muted); margin-bottom: 8px; }
+  .section-head h2 { font-size: clamp(44px, 7vw, 96px); letter-spacing: -.05em; line-height: .98; font-weight: 800; }
+  .reveal { opacity: 0; transform: translateY(50px); transition: opacity 1.1s var(--ease), transform 1.2s var(--ease); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* ---------- Horizontal projects ---------- */
+  #work { background: var(--bg-alt); }
+  #work .sticky { display: flex; flex-direction: column; justify-content: center; gap: 5vh; }
+  .track { display: flex; gap: 24px; padding: 0 max(16px, calc(50vw - 540px)); will-change: transform; }
+  .card {
+    flex: 0 0 auto; width: min(400px, 80vw); height: min(520px, 58vh); border-radius: var(--radius); position: relative; overflow: hidden;
+    background: var(--card); box-shadow: 0 2px 8px rgba(0,0,0,.04); display: flex; flex-direction: column; padding: 30px;
+    transition: transform .6s var(--ease), box-shadow .6s var(--ease);
+  }
+  .card:hover { transform: translateY(-8px) scale(1.01); box-shadow: 0 30px 60px -20px rgba(0,0,0,.18); }
+  .card .tag { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+  .card h3 { font-size: 32px; letter-spacing: -.035em; line-height: 1.05; margin: 10px 0 10px; font-weight: 700; }
+  .card p { color: var(--ink-2); font-size: 16px; max-width: 30ch; }
+  .card .art { flex: 1; margin: 20px -30px -30px; position: relative; overflow: hidden; }
+  .card .more { position: absolute; right: 22px; bottom: 22px; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,.85); backdrop-filter: blur(10px); display: grid; place-items: center; box-shadow: 0 4px 14px rgba(0,0,0,.12); transition: transform .4s var(--ease); z-index: 2; }
+  .card:hover .more { transform: rotate(-45deg) scale(1.1); }
+  .card .glow { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .4s; background: radial-gradient(400px circle at var(--mx, 50%) var(--my, 50%), rgba(123, 92, 255, .10), transparent 45%); }
+  .card:hover .glow { opacity: 1; }
+  .art-blob { position: absolute; border-radius: 50%; filter: blur(30px); }
+  .art-shape { position: absolute; left: 50%; bottom: -20px; transform: translateX(-50%); }
+  .work-foot { width: min(1080px, 100% - 32px); margin: 0 auto; display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 14px; }
+  .work-bar { width: 160px; height: 3px; border-radius: 2px; background: var(--faint); overflow: hidden; }
+  .work-bar i { display: block; height: 100%; width: 100%; background: var(--ink); transform-origin: 0 50%; transform: scaleX(0); }
+
+  /* ---------- Toolkit (converge) ---------- */
+  #toolkit { height: 260vh; }
+  #toolkit .sticky { display: grid; place-items: center; }
+  .tk-title { position: relative; z-index: 2; text-align: center; padding: 0 16px; will-change: transform, opacity; }
+  .tk-title h2 { font-size: clamp(48px, 9vw, 130px); font-weight: 800; letter-spacing: -.055em; line-height: .95; }
+  .tk-title p { margin-top: 18px; color: var(--muted); font-size: clamp(17px, 1.8vw, 21px); }
+  .tiles { position: absolute; inset: 0; }
+  .tile {
+    position: absolute; left: 50%; top: 50%; display: flex; align-items: center; gap: 10px; white-space: nowrap;
+    padding: 14px 20px; border-radius: 20px; background: #fff; border: 1px solid var(--line);
+    box-shadow: 0 10px 30px -12px rgba(0,0,0,.15); font-weight: 600; font-size: 16px; letter-spacing: -.01em;
+    will-change: transform, opacity;
+  }
+  @media (max-width: 700px) { .tile { font-size: 13px; padding: 9px 12px; gap: 7px; border-radius: 14px; } .tile i { width: 22px !important; height: 22px !important; font-size: 10px !important; } }
+  .tile i { width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; color: #fff; font-style: normal; font-size: 12px; font-weight: 800; }
+
+  /* ---------- Numbers ---------- */
+  #numbers { padding: 18vh 0; }
+  .stats { width: min(1080px, 100% - 32px); margin: 8vh auto 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .stat { background: var(--bg-alt); border-radius: var(--radius); padding: 40px 32px; }
+  .stat b { display: block; font-size: clamp(56px, 7vw, 96px); font-weight: 800; letter-spacing: -.05em; line-height: 1; }
+  .stat .lbl { display: block; margin-top: 12px; color: var(--muted); font-size: 17px; }
+  .stat:nth-child(2) { transition-delay: .1s } .stat:nth-child(3) { transition-delay: .2s }
+  @media (max-width: 760px) { .stats { grid-template-columns: 1fr; } }
+
+  /* ---------- About bento ---------- */
+  #about { padding: 6vh 0 18vh; }
+  .bento { width: min(1080px, 100% - 32px); margin: 8vh auto 0; display: grid; grid-template-columns: repeat(6, 1fr); gap: 20px; }
+  .b { border-radius: var(--radius); padding: 34px; background: var(--bg-alt); position: relative; overflow: hidden; min-height: 240px; }
+  .b h4 { font-size: 28px; letter-spacing: -.035em; line-height: 1.1; font-weight: 700; }
+  .b p { margin-top: 10px; color: var(--muted); font-size: 17px; max-width: 40ch; }
+  .b1 { grid-column: span 4; background: var(--ink); color: #fff; }
+  .b1 p { color: #a1a1a6; }
+  .b2 { grid-column: span 2; }
+  .b3 { grid-column: span 2; }
+  .b4 { grid-column: span 4; }
+  .b .big { font-size: 64px; line-height: 1; margin-bottom: 18px; }
+  .code {
+    margin-top: 22px; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13.5px; line-height: 1.75; color: #d1d1d6;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; padding: 18px 20px; overflow-x: auto;
+  }
+  .code .c1 { color: #ff7ab2; } .code .c2 { color: #6bdfff; } .code .c3 { color: #fc6a5d; } .code .c4 { color: #7f8c98; }
+  .caret { display: inline-block; width: 8px; height: 1.1em; background: #fff; vertical-align: -3px; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .nick { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .nick span { padding: 6px 12px; border-radius: 99px; background: #fff; font-size: 14px; font-weight: 500; border: 1px solid var(--line); }
+  @media (max-width: 860px) { .b1, .b2, .b3, .b4 { grid-column: span 6; } }
+
+  /* ---------- Contact ---------- */
+  #contact { height: 220vh; }
+  #contact .sticky { display: grid; place-items: center; text-align: center; padding: 0 16px; }
+  .contact-inner { will-change: transform; }
+  .contact-inner h2 { font-size: clamp(54px, 11vw, 168px); font-weight: 800; letter-spacing: -.06em; line-height: .92; }
+  .contact-inner h2 .fill {
+    background: linear-gradient(100deg, var(--g1), var(--g2), var(--g3), var(--g4)) 0 0 / var(--fill, 0%) 100% no-repeat, linear-gradient(var(--faint), var(--faint));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .contact-inner p { margin: 28px auto 0; color: var(--muted); font-size: clamp(17px, 1.8vw, 21px); max-width: 34ch; }
+  .ctas { margin-top: 40px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px; padding: 16px 28px; border-radius: 999px; font-size: 17px; font-weight: 600;
+    transition: transform .4s var(--ease), box-shadow .4s var(--ease), background .3s; will-change: transform;
+  }
+  .btn.primary { background: var(--blue); color: #fff; box-shadow: 0 12px 30px -10px rgba(0,113,227,.6); }
+  .btn.primary:hover { background: #0077ed; box-shadow: 0 18px 40px -10px rgba(0,113,227,.7); }
+  .btn.ghost { background: #fff; border: 1px solid var(--line); }
+  .btn.ghost:hover { box-shadow: 0 12px 30px -12px rgba(0,0,0,.2); }
+
+  footer { border-top: 1px solid var(--line); padding: 28px 0 40px; }
+  .foot { width: min(1080px, 100% - 32px); margin: 0 auto; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+  .foot a:hover { color: var(--ink); }
+  .foot nav { display: flex; gap: 20px; }
+
+
+  /* ---------- Three.js ---------- */
+  .gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
+  #heroGL { opacity: 0; transition: opacity 1.6s var(--ease); }
+  #heroGL.ready { opacity: 1; }
+  #morph { height: 520vh; }
+  #morph .sticky { background: radial-gradient(80% 60% at 50% 45%, #ffffff 0%, var(--bg) 60%, #f1f1f6 100%); }
+  .morph-head { position: absolute; top: 88px; left: 0; right: 0; width: min(1080px, 100% - 32px); margin: 0 auto; z-index: 2; }
+  .morph-head .k { font-size: 17px; font-weight: 600; color: var(--muted); }
+  .mcaps { position: absolute; left: 0; right: 0; bottom: 9vh; height: 150px; z-index: 2; pointer-events: none; }
+  .mcap { position: absolute; inset: 0; text-align: center; padding: 0 16px; opacity: 0; transform: translateY(24px); filter: blur(8px);
+    transition: opacity .8s var(--ease), transform .9s var(--ease), filter .8s var(--ease); }
+  .mcap.on { opacity: 1; transform: none; filter: none; }
+  .mcap .n { font-size: 13px; font-weight: 600; letter-spacing: .12em; color: var(--muted); }
+  .mcap h3 { font-size: clamp(44px, 7vw, 92px); font-weight: 800; letter-spacing: -.05em; line-height: 1; margin-top: 6px; }
+  .mcap p { margin-top: 10px; color: var(--muted); font-size: clamp(16px, 1.6vw, 20px); }
+  .mrail { position: absolute; right: max(16px, calc(50% - 540px)); top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 10px; z-index: 2; }
+  .mrail i { width: 6px; height: 6px; border-radius: 99px; background: var(--faint); transition: height .5s var(--ease), background .5s; }
+  .mrail i.on { height: 26px; background: var(--ink); }
+  .no3d #morph { display: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .001ms !important; animation-delay: 0s !important; transition-duration: .001ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#top" class="logo">Afif Fahmi</a>
+    <nav class="nav-links">
+      <a href="#hero-apps">Craft</a>
+      <a href="#morph">Process</a>
+      <a href="#work">Work</a>
+      <a href="#toolkit">Toolkit</a>
+      <a href="#about">About</a>
+    </nav>
+    <a href="#contact" class="nav-cta">Say hello</a>
+  </div>
+  <div class="progress" id="progress"></div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO + PHONE ============ -->
+  <section class="scene" id="hero">
+    <div class="sticky">
+      <div class="orb a" data-orb="1"></div>
+      <div class="orb b" data-orb="-1"></div>
+      <div class="orb c" data-orb="1.4"></div>
+      <canvas class="gl" id="heroGL" aria-hidden="true"></canvas>
+
+      <div class="hero-copy" id="heroCopy">
+        <div class="eyebrow"><span class="dot"></span>Indie Mobile Developer</div>
+        <h1 class="hero-title"><span>Afif</span> <span class="grad">Fahmi.</span></h1>
+        <p class="hero-sub">Apps and games, crafted to feel just right.</p>
+      </div>
+      <div class="scroll-hint" id="hint"><i></i>Scroll</div>
+
+      <div class="stage" id="hero-apps">
+        <div class="phone-wrap" id="phoneWrap">
+          <div class="phone">
+            <div class="screen">
+              <div class="island"></div>
+              <div class="statusbar" id="statusbar"><span>9:41</span><span>●●● ▮</span></div>
+
+              <!-- App 1 -->
+              <div class="app app1 on" data-app="0">
+                <span style="color:var(--muted);font-weight:500">Good morning</span>
+                <h4>Today's meetups</h4>
+                <div class="days">
+                  <b>Mon<br><strong>12</strong></b><b>Tue<br><strong>13</strong></b><b class="sel">Wed<br><strong>14</strong></b><b>Thu<br><strong>15</strong></b><b>Fri<br><strong>16</strong></b>
+                </div>
+                <div class="meet" style="--c:#0071e3"><strong>Design sync</strong><span>10:00 – 10:30 · Online</span><div class="avatars"><i style="--c:#ffb340"></i><i style="--c:#7b5cff"></i><i style="--c:#34c759"></i></div></div>
+                <div class="meet" style="--c:#ff5c8a"><strong>Lunch with the team</strong><span>12:30 – 13:30 · Café</span><div class="avatars"><i style="--c:#0a84ff"></i><i style="--c:#ff5c8a"></i></div></div>
+                <div class="meet" style="--c:#34c759"><strong>Ship v1.2 🚀</strong><span>16:00 · Release</span></div>
+              </div>
+
+              <!-- App 2 -->
+              <div class="app app2" data-app="1">
+                <div class="hud"><div class="bar hp"><i></i></div><div class="bar st"><i></i></div></div>
+                <div class="boss-name">THE HOLLOW WARDEN</div>
+                <svg class="mountains" viewBox="0 0 300 300" preserveAspectRatio="none"><path d="M0 120 L50 60 L90 110 L150 30 L210 100 L250 70 L300 110 L300 300 L0 300Z" fill="#3a1a3f" opacity=".85"/><path d="M0 190 L60 140 L120 180 L180 130 L240 170 L300 150 L300 300 L0 300Z" fill="#1a0f26"/></svg>
+                <div class="boss"></div>
+                <div class="hero-sil"></div>
+                <div class="joy"></div>
+                <div class="btns"><i></i><i></i></div>
+              </div>
+
+              <!-- App 3 -->
+              <div class="app app3" data-app="2">
+                <span class="chip">● Ready to sign</span>
+                <div class="doc" style="margin-top:12px">
+                  <h5>Service Agreement</h5>
+                  <div class="ln" style="width:92%"></div><div class="ln" style="width:100%"></div><div class="ln" style="width:78%"></div>
+                  <div class="ln" style="width:96%"></div><div class="ln" style="width:64%"></div>
+                  <div class="sig">
+                    <div><div style="font-size:9px;color:var(--muted)">Signed by</div><svg viewBox="0 0 110 40"><path d="M4 30 C 14 8, 22 8, 24 26 S 36 36, 42 18 S 52 6, 56 24 S 70 34, 76 20 C 82 10, 90 14, 106 16" fill="none" stroke="#1d1d1f" stroke-width="2.2" stroke-linecap="round"/></svg></div>
+                    <span style="font-size:9px;color:var(--muted)">Today</span>
+                  </div>
+                </div>
+                <div class="signbtn">Sign &amp; send</div>
+              </div>
+
+              <!-- App 4 -->
+              <div class="app app4" data-app="3">
+                <span style="color:var(--muted);font-weight:500">Overview</span>
+                <h4>Dashboard</h4>
+                <div class="kpis">
+                  <div class="kpi"><b>2,481</b><span>Records logged</span></div>
+                  <div class="kpi"><b style="color:#34c759">+18%</b><span>This week</span></div>
+                </div>
+                <div class="chart"><i style="--h:40%"></i><i style="--h:62%"></i><i style="--h:48%"></i><i style="--h:80%"></i><i style="--h:58%"></i><i style="--h:92%"></i><i style="--h:74%"></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="captions">
+        <div class="cap left" data-cap="0"><span class="k grad">React Native · Flutter</span><h3>One codebase.<br>Every pocket.</h3><p>Cross-platform apps that feel native on iOS and Android, built to be fast and lovely to use.</p></div>
+        <div class="cap right" data-cap="1"><span class="k grad">Unity · C#</span><h3>Games worth<br>picking up.</h3><p>Mobile games made with friends — including a souls-like built with my housemates.</p></div>
+        <div class="cap left" data-cap="2"><span class="k grad">TypeScript · React</span><h3>Paperwork,<br>made painless.</h3><p>Clean, focused tools that turn tedious flows into a few satisfying taps.</p></div>
+        <div class="cap right" data-cap="3"><span class="k grad">Node.js · NestJS</span><h3>Data you can<br>read at a glance.</h3><p>Dashboards and backends that make the numbers obvious.</p></div>
+      </div>
+      <div class="dots" id="dots"><i class="on"></i><i></i><i></i><i></i></div>
+    </div>
+  </section>
+
+  <!-- ============ STATEMENT ============ -->
+  <section class="scene" id="statement">
+    <div class="sticky">
+      <p class="statement" id="statementText">I'm Afif, an indie developer who believes great software should feel *effortless.* I sweat the small details — the spring of a button, the rhythm of a scroll — so every app feels *crafted,* not just coded.</p>
+    </div>
+  </section>
+
+  <!-- ============ MORPH (three.js particles) ============ -->
+  <section class="scene" id="morph">
+    <div class="sticky">
+      <canvas class="gl" id="morphGL" aria-hidden="true"></canvas>
+      <div class="morph-head"><div class="k">How I work</div></div>
+      <div class="mrail" id="mrail"><i class="on"></i><i></i><i></i><i></i></div>
+      <div class="mcaps">
+        <div class="mcap on" data-m="0"><div class="n">01</div><h3>Imagine<span class="grad">.</span></h3><p>Every app starts as a single spark.</p></div>
+        <div class="mcap" data-m="1"><div class="n">02</div><h3>Design<span class="grad">.</span></h3><p>Shaped and reshaped until it feels inevitable.</p></div>
+        <div class="mcap" data-m="2"><div class="n">03</div><h3>Build<span class="grad">.</span></h3><p>Engineered for the device in your hand.</p></div>
+        <div class="mcap" data-m="3"><div class="n">04</div><h3>Ship<span class="grad">.</span></h3><p>Out into the world — then iterate.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WORK (horizontal) ============ -->
+  <section class="scene" id="work">
+    <div class="sticky">
+      <div class="section-head">
+        <div class="k">Selected work</div>
+        <h2>Things I've <span class="grad">built.</span></h2>
+      </div>
+      <div class="track" id="track"></div>
+      <div class="work-foot"><span>Keep scrolling →</span><div class="work-bar"><i id="workBar"></i></div></div>
+    </div>
+  </section>
+
+  <!-- ============ TOOLKIT ============ -->
+  <section class="scene" id="toolkit">
+    <div class="sticky">
+      <div class="tiles" id="tiles"></div>
+      <div class="tk-title" id="tkTitle">
+        <h2>The <span class="grad">toolkit.</span></h2>
+        <p>Everything I reach for to ship.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ NUMBERS ============ -->
+  <section id="numbers">
+    <div class="section-head reveal">
+      <div class="k">By the numbers</div>
+      <h2>Always<br>shipping.</h2>
+    </div>
+    <div class="stats">
+      <div class="stat reveal"><b><span data-count="50">0</span>+</b><span class="lbl">Public repositories on GitHub</span></div>
+      <div class="stat reveal"><b><span data-count="2022" data-from="2000">2000</span></b><span class="lbl">Writing code &amp; shipping since</span></div>
+      <div class="stat reveal"><b><span data-count="6">0</span>+</b><span class="lbl">Languages across mobile, web &amp; games</span></div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section id="about">
+    <div class="section-head reveal">
+      <div class="k">About</div>
+      <h2>A little<br>about <span class="grad">me.</span></h2>
+    </div>
+    <div class="bento">
+      <div class="b b1 reveal">
+        <h4>Currently building in React Native.</h4>
+        <p>And always learning — Node.js, Flutter, React and NestJS are on the bench.</p>
+        <div class="code"><span class="c1">const</span> <span class="c2">afif</span> = {<br>&nbsp;&nbsp;role: <span class="c3">"Indie Mobile Developer"</span>,<br>&nbsp;&nbsp;building: <span class="c3">"React Native apps"</span>,<br>&nbsp;&nbsp;learning: [<span class="c3">"Flutter"</span>, <span class="c3">"NestJS"</span>, <span class="c3">"Node.js"</span>],<br>&nbsp;&nbsp;<span class="c4">// open to collaborate</span><br>};<span class="caret"></span></div>
+      </div>
+      <div class="b b2 reveal">
+        <div class="big">📱</div>
+        <h4>Mobile first.</h4>
+        <p>From idea to the home screen — design, code, and release.</p>
+      </div>
+      <div class="b b3 reveal">
+        <div class="big">🎮</div>
+        <h4>Game dev, too.</h4>
+        <p>Unity &amp; C# projects, plus tooling for fellow game devs.</p>
+      </div>
+      <div class="b b4 reveal">
+        <h4>Fun fact: I have a <span class="grad">lot</span> of nicknames.</h4>
+        <p>Call me whatever you like — just call me when you want to build something.</p>
+        <div class="nick"><span>Afif</span><span>Fahmi</span><span>kmlhjjz</span><span>…and many more</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="scene" id="contact">
+    <div class="sticky">
+      <div class="contact-inner" id="contactInner">
+        <h2><span class="fill" id="fill">Let's build<br>something.</span></h2>
+        <p>Have an idea, a project, or just want to say hi? My inbox is always open.</p>
+        <div class="ctas">
+          <a class="btn primary magnetic" href="mailto:afif.rafpi@gmail.com">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m22 7-10 6L2 7"/></svg>
+            afif.rafpi@gmail.com</a>
+          <a class="btn ghost magnetic" href="https://github.com/Afiffahmi" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
+            GitHub</a>
+          <a class="btn ghost magnetic" href="https://twitter.com/kmlhjjz" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            @kmlhjjz</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="foot">
+    <span>© <span id="year"></span> Afif Fahmi. Designed &amp; built with care.</span>
+    <nav>
+      <a href="https://github.com/Afiffahmi" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://twitter.com/kmlhjjz" target="_blank" rel="noopener">Twitter</a>
+      <a href="mailto:afif.rafpi@gmail.com">Email</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const map = (v, a, b) => clamp((v - a) / (b - a));
+  const ease = t => 1 - Math.pow(1 - t, 3);
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  $('#year').textContent = new Date().getFullYear();
+
+  /* ---------- Projects data ---------- */
+  const projects = [
+    { name: 'Souls-Like Mobile', tag: 'Game · C# / Unity', desc: 'A challenging action game for mobile, built with my housemates.', repo: 'Souls-Like-Mobile', c: ['#2b1645', '#ff8a3d'], icon: '⚔️' },
+    { name: 'MeetApp', tag: 'Mobile · Flutter', desc: 'A Flutter app for planning and keeping track of meetups.', repo: 'MeetApp', c: ['#0071e3', '#7bd0ff'], icon: '📅' },
+    { name: 'EAgreement', tag: 'Web · TypeScript', desc: 'Digital agreements, from drafting to signature.', repo: 'EAgreement', c: ['#1d1d1f', '#8e8e93'], icon: '✍️' },
+    { name: 'UIForge', tag: 'Tooling · TypeScript', desc: 'A toolkit to help game developers forge UI faster.', repo: 'uiforge', c: ['#7b5cff', '#ff5c8a'], icon: '🛠️' },
+    { name: 'Wedding Memories', tag: 'Web · TypeScript', desc: 'A place for guests to share the moments of a special day.', repo: 'wedding-memories', c: ['#ff9fb8', '#ffd6a5'], icon: '💍' },
+    { name: 'Heliconia Studios', tag: 'Web · TypeScript', desc: 'A studio showcase site with personality.', repo: 'heliconia-studios', c: ['#ff5c3a', '#ffb340'], icon: '🌺' },
+    { name: 'GameArcadeHub', tag: 'Game · C#', desc: 'A hub of bite-sized arcade games.', repo: 'GameArcadeHub', c: ['#34c759', '#0a84ff'], icon: '🕹️' },
+    { name: 'MyCarryMark', tag: 'Mobile · React Native', desc: 'Helping students keep track of their carry marks.', repo: 'MycarrymarkStudent', c: ['#5e5ce6', '#64d2ff'], icon: '🎓' },
+  ];
+  const track = $('#track');
+  track.innerHTML = projects.map((p, i) => `
+    <a class="card" href="https://github.com/Afiffahmi/${p.repo}" target="_blank" rel="noopener">
+      <div class="glow"></div>
+      <span class="tag">${p.tag}</span>
+      <h3>${p.name}</h3>
+      <p>${p.desc}</p>
+      <div class="art" style="background:linear-gradient(160deg, ${p.c[0]}22, ${p.c[1]}33)">
+        <div class="art-blob" style="width:220px;height:220px;left:-40px;top:10px;background:${p.c[0]};opacity:.45"></div>
+        <div class="art-blob" style="width:200px;height:200px;right:-40px;bottom:-30px;background:${p.c[1]};opacity:.55"></div>
+        <div class="art-shape" style="width:62%;aspect-ratio:1;border-radius:36px 36px 0 0;background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,255,255,.65));backdrop-filter:blur(10px);box-shadow:0 -10px 40px rgba(0,0,0,.08);display:grid;place-items:center;font-size:64px;">${p.icon}</div>
+      </div>
+      <span class="more"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>`).join('');
+  $$('.card').forEach(c => c.addEventListener('pointermove', e => {
+    const r = c.getBoundingClientRect();
+    c.style.setProperty('--mx', `${e.clientX - r.left}px`);
+    c.style.setProperty('--my', `${e.clientY - r.top}px`);
+  }));
+
+  /* ---------- Toolkit tiles ---------- */
+  const tools = [
+    ['React Native', '#61dafb', 'RN'], ['Flutter', '#02569b', 'F'], ['TypeScript', '#3178c6', 'TS'], ['React', '#149eca', 'R'],
+    ['Node.js', '#5fa04e', 'N'], ['NestJS', '#e0234e', 'Ne'], ['Unity', '#1d1d1f', 'U'], ['C#', '#68217a', 'C#'],
+    ['Dart', '#0175c2', 'D'], ['Firebase', '#ffa000', 'Fb'], ['Python', '#3776ab', 'Py'], ['Android', '#3ddc84', 'A'],
+    ['PHP', '#777bb4', 'P'], ['Docker', '#2496ed', 'Dk'], ['HTML & CSS', '#e34f26', '&lt;/&gt;'], ['Java', '#e76f00', 'J'],
+  ];
+  const tilesEl = $('#tiles');
+  tilesEl.innerHTML = tools.map(([n, c, a]) => `<div class="tile"><i style="background:${c}">${a}</i>${n}</div>`).join('');
+  const tiles = $$('.tile', tilesEl);
+  // final positions: ring around title; start: scattered far
+  const tileData = tiles.map((t, i) => {
+    const ang = (i / tiles.length) * Math.PI * 2 + (i % 2 ? .12 : -.12);
+    const ring = i % 2 ? 1 : .78;
+    const sAng = ang + (Math.random() - .5) * 1.2;
+    return { ang, ring, sAng, sR: 1.9 + Math.random() * .8, rot: (Math.random() - .5) * 40, depth: .6 + Math.random() * .6 };
+  });
+
+  /* ---------- Statement words ---------- */
+  const st = $('#statementText');
+  st.innerHTML = st.textContent.split(' ').map(w => {
+    const hl = w.startsWith('*');
+    w = w.replace(/\*/g, '');
+    return `<span class="w${hl ? ' hl' : ''}">${w}</span>`;
+  }).join(' ');
+  const words = $$('.w', st);
+
+  /* ---------- Reveal on view ---------- */
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('in');
+    $$('[data-count]', e.target).forEach(countUp);
+    io.unobserve(e.target);
+  }), { threshold: .2 });
+  $$('.reveal').forEach(el => io.observe(el));
+  function countUp(el) {
+    const to = +el.dataset.count, from = +(el.dataset.from || 0), t0 = performance.now(), dur = reduce ? 1 : 1600;
+    (function tick(t) {
+      const p = ease(clamp((t - t0) / dur));
+      el.textContent = Math.round(from + (to - from) * p);
+      if (p < 1) requestAnimationFrame(tick);
+    })(t0);
+  }
+
+  /* ---------- Magnetic buttons ---------- */
+  if (matchMedia('(hover: hover)').matches) $$('.magnetic').forEach(b => {
+    b.addEventListener('pointermove', e => {
+      const r = b.getBoundingClientRect();
+      b.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * .25}px, ${(e.clientY - r.top - r.height / 2) * .35}px)`;
+    });
+    b.addEventListener('pointerleave', () => b.style.transform = '');
+  });
+
+  /* ---------- Layout ---------- */
+  const hero = $('#hero'), statement = $('#statement'), work = $('#work'), toolkit = $('#toolkit'), contact = $('#contact');
+  let vh = innerHeight, vw = innerWidth, travel = 0;
+  function layout() {
+    vh = innerHeight; vw = innerWidth;
+    travel = Math.max(0, track.scrollWidth - vw);
+    work.style.height = `${travel + vh * 1.15}px`;
+  }
+  const progressOf = el => {
+    const r = el.getBoundingClientRect();
+    return clamp(-r.top / (el.offsetHeight - vh || 1));
+  };
+
+  /* ---------- Main loop ---------- */
+  const heroCopy = $('#heroCopy'), hint = $('#hint'), phoneWrap = $('#phoneWrap');
+  const apps = $$('.app'), caps = $$('.cap'), dots = $$('#dots i'), dotsEl = $('#dots');
+  const orbs = $$('[data-orb]');
+  const nav = $('#nav'), bar = $('#progress');
+  let activeApp = -1, lastY = -1;
+
+  function frame() {
+    const y = scrollY;
+    if (y !== lastY) {
+      lastY = y;
+      nav.classList.toggle('scrolled', y > 10);
+      bar.style.transform = `scaleX(${clamp(y / (document.documentElement.scrollHeight - vh))})`;
+
+      // HERO
+      const hp = progressOf(hero);
+      const intro = ease(map(hp, 0, .2));
+      heroCopy.style.transform = `scale(${1 - intro * .25}) translateY(${-intro * 6}vh)`;
+      heroCopy.style.opacity = 1 - map(hp, .04, .17);
+      heroCopy.style.filter = `blur(${map(hp, .04, .17) * 14}px)`;
+      hint.style.visibility = hp > .01 ? 'hidden' : '';
+      const phoneIn = ease(map(hp, .02, .22));
+      const phoneOut = ease(map(hp, .92, 1));
+      phoneWrap.style.transform = `translateY(${(1 - phoneIn) * 100 - phoneOut * 8}vh) scale(${.86 + phoneIn * .14 - phoneOut * .06}) rotateX(${(1 - phoneIn) * 18}deg)`;
+      phoneWrap.style.opacity = 1 - phoneOut;
+      orbs.forEach(o => o.style.transform = `translate3d(${hp * 18 * o.dataset.orb}vw, ${-hp * 30 * o.dataset.orb}vh, 0) scale(${1 + hp * .3})`);
+      const seg = map(hp, .22, .92);
+      const idx = hp < .2 ? -1 : Math.min(3, Math.floor(seg * 4));
+      if (idx !== activeApp) {
+        activeApp = idx;
+        const show = Math.max(0, idx);
+        apps.forEach((a, i) => a.classList.toggle('on', i === show));
+        caps.forEach((c, i) => c.classList.toggle('on', i === idx));
+        dots.forEach((d, i) => d.classList.toggle('on', i === show));
+        dotsEl.classList.toggle('on', idx >= 0);
+        $('#statusbar').style.color = show === 1 ? '#fff' : '';
+      }
+      if (hp >= .92) caps.forEach(c => c.classList.remove('on')), dotsEl.classList.remove('on');
+
+      // STATEMENT
+      const sp = map(progressOf(statement), .05, .85);
+      const lit = sp * words.length;
+      words.forEach((w, i) => w.style.opacity = .12 + .88 * clamp(lit - i));
+
+      // WORK
+      const wp = progressOf(work);
+      const wpp = map(wp, .04, .96);
+      track.style.transform = `translate3d(${-wpp * travel}px,0,0)`;
+      $('#workBar').style.transform = `scaleX(${wpp})`;
+
+      // TOOLKIT
+      const tp = progressOf(toolkit);
+      const conv = ease(map(tp, 0, .6));
+      const small = vw < 700;
+      const rx = small ? vw * .3 : Math.min(vw * .38, 560);
+      const ryA = small ? vh * .34 : vh * .36;
+      const edge = vw / 2 - (small ? 64 : 110);
+      tiles.forEach((t, i) => {
+        const d = tileData[i];
+        const a = d.sAng + (d.ang - d.sAng) * conv;
+        const rr = d.sR + (d.ring - d.sR) * conv;
+        let x = Math.max(-edge, Math.min(edge, Math.cos(a) * rr * rx)) * conv + Math.cos(a) * rr * rx * (1 - conv);
+        let yy = Math.sin(a) * rr * ryA;
+        if (small) {
+          // phones: settle into a neat 2-column grid above and below the title
+          const half = i < 8, k = i % 8, col = k % 2, row = Math.floor(k / 2);
+          const gap = Math.min(48, (vh / 2 - 140) / 4);
+          const fx = (col ? 1 : -1) * vw * .22;
+          const fy = half ? -(110 + (3 - row) * gap) : 110 + row * gap + 20;
+          const sx = Math.cos(d.sAng) * d.sR * rx, sy = Math.sin(d.sAng) * d.sR * ryA;
+          x = sx + (fx - sx) * conv; yy = sy + (fy - sy) * conv;
+        }
+        const exit = ease(map(tp, .82, 1));
+        t.style.transform = `translate(-50%,-50%) translate3d(${x * (1 + exit * .6)}px, ${yy * (1 + exit * .6)}px,0) rotate(${d.rot * (1 - conv)}deg) scale(${(.6 + .4 * conv) * d.depth ** (1 - conv)})`;
+        t.style.opacity = clamp(conv * 1.4) * (1 - exit);
+      });
+      const tt = $('#tkTitle');
+      tt.style.transform = `scale(${1.25 - conv * .25})`;
+      tt.style.opacity = clamp(.15 + conv) * (1 - ease(map(tp, .85, 1)));
+
+      // CONTACT
+      const cp = progressOf(contact);
+      const ci = ease(map(cp, 0, .5));
+      $('#contactInner').style.transform = `scale(${.82 + ci * .18}) translateY(${(1 - ci) * 6}vh)`;
+      $('#fill').style.setProperty('--fill', `${map(cp, .05, .7) * 100}%`);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  addEventListener('resize', () => { layout(); lastY = -1; });
+  addEventListener('load', () => { layout(); lastY = -1; });
+  layout();
+  requestAnimationFrame(frame);
+})();
+</script>
+<script type="module">
+/* ================= Three.js: liquid pearl hero + particle morph ================= */
+const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js';
+let THREE;
+try { THREE = await import(THREE_URL); } catch (e) { document.documentElement.classList.add('no3d'); }
+
+if (THREE) {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const map = (v, a, b) => clamp((v - a) / (b - a));
+  const ease = t => 1 - Math.pow(1 - t, 3);
+  const sstep = (a, b, x) => { const t = clamp((x - a) / (b - a)); return t * t * (3 - 2 * t); };
+  const progressOf = el => { const r = el.getBoundingClientRect(); return clamp(-r.top / (el.offsetHeight - innerHeight || 1)); };
+  const PR = Math.min(devicePixelRatio || 1, 2);
+  const mobile = innerWidth < 700;
+
+  const NOISE = `
+  vec3 mod289(vec3 x){return x-floor(x*(1./289.))*289.;}
+  vec4 mod289(vec4 x){return x-floor(x*(1./289.))*289.;}
+  vec4 permute(vec4 x){return mod289(((x*34.)+1.)*x);}
+  vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-.85373472095314*r;}
+  float snoise(vec3 v){
+    const vec2 C=vec2(1./6.,1./3.); const vec4 D=vec4(0.,.5,1.,2.);
+    vec3 i=floor(v+dot(v,C.yyy)); vec3 x0=v-i+dot(i,C.xxx);
+    vec3 g=step(x0.yzx,x0.xyz); vec3 l=1.-g; vec3 i1=min(g.xyz,l.zxy); vec3 i2=max(g.xyz,l.zxy);
+    vec3 x1=x0-i1+C.xxx; vec3 x2=x0-i2+C.yyy; vec3 x3=x0-D.yyy;
+    i=mod289(i);
+    vec4 p=permute(permute(permute(i.z+vec4(0.,i1.z,i2.z,1.))+i.y+vec4(0.,i1.y,i2.y,1.))+i.x+vec4(0.,i1.x,i2.x,1.));
+    float n_=.142857142857; vec3 ns=n_*D.wyz-D.xzx;
+    vec4 j=p-49.*floor(p*ns.z*ns.z); vec4 x_=floor(j*ns.z); vec4 y_=floor(j-7.*x_);
+    vec4 x=x_*ns.x+ns.yyyy; vec4 y=y_*ns.x+ns.yyyy; vec4 h=1.-abs(x)-abs(y);
+    vec4 b0=vec4(x.xy,y.xy); vec4 b1=vec4(x.zw,y.zw);
+    vec4 s0=floor(b0)*2.+1.; vec4 s1=floor(b1)*2.+1.; vec4 sh=-step(h,vec4(0.));
+    vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy; vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
+    vec3 p0=vec3(a0.xy,h.x); vec3 p1=vec3(a0.zw,h.y); vec3 p2=vec3(a1.xy,h.z); vec3 p3=vec3(a1.zw,h.w);
+    vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));
+    p0*=norm.x; p1*=norm.y; p2*=norm.z; p3*=norm.w;
+    vec4 m=max(.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.); m=m*m;
+    return 42.*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
+  }
+  vec3 brand(float t){
+    t=fract(t)*4.;
+    vec3 c1=vec3(.0,.44,.89), c2=vec3(.48,.36,1.), c3=vec3(1.,.36,.54), c4=vec3(1.,.62,.04);
+    if(t<1.) return mix(c1,c2,smoothstep(0.,1.,t));
+    if(t<2.) return mix(c2,c3,smoothstep(1.,2.,t));
+    if(t<3.) return mix(c3,c4,smoothstep(2.,3.,t));
+    return mix(c4,c1,smoothstep(3.,4.,t));
+  }`;
+
+  function makeStage(canvas, fov, z) {
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
+    renderer.setPixelRatio(PR);
+    renderer.setClearColor(0x000000, 0);
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(fov, 1, .1, 100);
+    camera.position.z = z;
+    const st = { renderer, scene, camera, visible: false, w: 0, h: 0 };
+    st.resize = () => {
+      const r = canvas.parentElement.getBoundingClientRect();
+      st.w = r.width; st.h = r.height;
+      renderer.setSize(r.width, r.height, false);
+      camera.aspect = r.width / r.height; camera.updateProjectionMatrix();
+    };
+    new IntersectionObserver(([e]) => st.visible = e.isIntersecting).observe(canvas.parentElement.parentElement);
+    st.resize();
+    return st;
+  }
+
+  // shared pointer (normalised, smoothed)
+  const ptr = { x: 0, y: 0, tx: 0, ty: 0, vel: 0 };
+  addEventListener('pointermove', e => {
+    const nx = e.clientX / innerWidth * 2 - 1, ny = -(e.clientY / innerHeight * 2 - 1);
+    ptr.vel = Math.min(1, ptr.vel + Math.hypot(nx - ptr.tx, ny - ptr.ty) * 2.5);
+    ptr.tx = nx; ptr.ty = ny;
+  }, { passive: true });
+
+  /* ---------- 1. Hero: liquid iridescent pearl ---------- */
+  const heroEl = document.getElementById('hero');
+  const heroCanvas = document.getElementById('heroGL');
+  let hero;
+  try {
+    hero = makeStage(heroCanvas, 35, 6);
+    const uniforms = { uTime: { value: 0 }, uAmp: { value: .2 }, uFreq: { value: 1.15 } };
+    const mat = new THREE.ShaderMaterial({
+      uniforms,
+      vertexShader: NOISE + `
+        uniform float uTime, uAmp, uFreq;
+        varying vec3 vN; varying vec3 vW; varying float vD;
+        float disp(vec3 p){ return snoise(p*uFreq + vec3(uTime*.22)) * uAmp + snoise(p*uFreq*2.3 - vec3(uTime*.17)) * uAmp * .28; }
+        vec3 dpos(vec3 d){ return d * (1. + disp(d)); }
+        void main(){
+          vec3 dir = normalize(position);
+          vec3 t = normalize(cross(dir, abs(dir.y) < .99 ? vec3(0.,1.,0.) : vec3(1.,0.,0.)));
+          vec3 b = cross(dir, t);
+          float e = .012;
+          vec3 p = dpos(dir);
+          vec3 n = normalize(cross(dpos(normalize(dir + t*e)) - p, dpos(normalize(dir + b*e)) - p));
+          vD = disp(dir);
+          vec4 w = modelMatrix * vec4(p, 1.);
+          vW = w.xyz; vN = normalize(mat3(modelMatrix) * n);
+          gl_Position = projectionMatrix * viewMatrix * w;
+        }`,
+      fragmentShader: NOISE + `
+        uniform float uTime;
+        varying vec3 vN; varying vec3 vW; varying float vD;
+        void main(){
+          vec3 n = normalize(vN), v = normalize(cameraPosition - vW);
+          float ndv = max(dot(n, v), 0.);
+          float fr = pow(1. - ndv, 2.4);
+          vec3 L = normalize(vec3(-.5, .9, .7));
+          float diff = max(dot(n, L), 0.);
+          float spec = pow(max(dot(n, normalize(L + v)), 0.), 90.);
+          float spec2 = pow(max(dot(n, normalize(normalize(vec3(.7,-.4,.6)) + v)), 0.), 24.) * .25;
+          vec3 irid = brand(ndv * .85 + vD * 1.6 + n.y * .25 + uTime * .03);
+          vec3 base = vec3(.975, .975, .99);
+          vec3 col = mix(base, irid, .16 + fr * .78);
+          col *= .84 + .16 * diff;
+          col += spec * .95 + spec2;
+          gl_FragColor = vec4(col, 1.);
+        }`,
+    });
+    const blob = new THREE.Mesh(new THREE.IcosahedronGeometry(1, mobile ? 40 : 64), mat);
+    hero.scene.add(blob);
+
+    // halo ring of tiny satellites
+    const satN = 140, satPos = new Float32Array(satN * 3), satRnd = new Float32Array(satN);
+    for (let i = 0; i < satN; i++) {
+      const a = Math.random() * Math.PI * 2, r = 1.7 + Math.random() * .9;
+      satPos.set([Math.cos(a) * r, (Math.random() - .5) * .5, Math.sin(a) * r], i * 3); satRnd[i] = Math.random();
+    }
+    const satGeo = new THREE.BufferGeometry();
+    satGeo.setAttribute('position', new THREE.BufferAttribute(satPos, 3));
+    satGeo.setAttribute('aRand', new THREE.BufferAttribute(satRnd, 1));
+    const sats = new THREE.Points(satGeo, new THREE.ShaderMaterial({
+      transparent: true, depthWrite: false,
+      uniforms: { uTime: uniforms.uTime, uPR: { value: PR } },
+      vertexShader: NOISE + `uniform float uTime, uPR; attribute float aRand; varying float vR;
+        void main(){ vR = aRand; vec4 mv = modelViewMatrix * vec4(position + vec3(0., sin(uTime*.8 + aRand*20.)*.08, 0.), 1.);
+        gl_PointSize = (6. + aRand*10.) * uPR / -mv.z; gl_Position = projectionMatrix * mv; }`,
+      fragmentShader: NOISE + `varying float vR; void main(){ float d = length(gl_PointCoord - .5); if(d > .5) discard;
+        gl_FragColor = vec4(brand(vR), smoothstep(.5, .1, d) * .75); }`,
+    }));
+    sats.rotation.x = .35;
+    hero.scene.add(sats);
+
+    hero.update = (t, dt) => {
+      const hp = progressOf(heroEl);
+      const intro = ease(map(hp, 0, .2)), out = ease(map(hp, .9, 1));
+      const visW = 2 * hero.camera.position.z * Math.tan(THREE.MathUtils.degToRad(hero.camera.fov / 2)) * hero.camera.aspect;
+      const s = Math.min(.98, visW * .33) * (1 - intro * .3);
+      blob.scale.setScalar(s); sats.scale.setScalar(s);
+      uniforms.uTime.value = t;
+      uniforms.uAmp.value += ((.2 + ptr.vel * .22 + intro * .06) - uniforms.uAmp.value) * .06;
+      blob.rotation.y += dt * .12;
+      blob.rotation.x = hp * 2.4 + ptr.y * .25;
+      blob.rotation.z = ptr.x * .2;
+      blob.position.set(ptr.x * .12, ptr.y * .08 - intro * .1, 0);
+      sats.rotation.y += dt * .18;
+      sats.position.copy(blob.position);
+      heroCanvas.style.opacity = heroCanvas.classList.contains('ready') ? 1 - out : '';
+    };
+    requestAnimationFrame(() => heroCanvas.classList.add('ready'));
+  } catch (e) { heroCanvas.remove(); hero = null; }
+
+  /* ---------- 2. Morph: particles that become ideas ---------- */
+  const morphEl = document.getElementById('morph');
+  let morph;
+  try {
+    morph = makeStage(document.getElementById('morphGL'), 40, 7);
+    const N = mobile ? 9000 : 16000;
+    const A = new Float32Array(N * 3), B = new Float32Array(N * 3), C = new Float32Array(N * 3), D = new Float32Array(N * 3), R = new Float32Array(N);
+    const rnd = Math.random, TAU = Math.PI * 2;
+    for (let i = 0; i < N; i++) {
+      R[i] = rnd();
+      // A — sphere (fibonacci shell)
+      const y = 1 - (i / (N - 1)) * 2, rr = Math.sqrt(1 - y * y), th = i * 2.399963, sr = 1.6 + (rnd() - .5) * .06;
+      A.set([Math.cos(th) * rr * sr, y * sr, Math.sin(th) * rr * sr], i * 3);
+      // B — torus knot (2,3)
+      const u = rnd() * TAU * 2, cs = Math.cos(1.5 * u), K = 1.05;
+      const tr = .2 * Math.sqrt(rnd()), ta = rnd() * TAU, tb = rnd() * TAU;
+      B.set([K * (2 + cs) * .5 * Math.cos(u) + Math.cos(ta) * Math.sin(tb) * tr,
+             K * (2 + cs) * .5 * Math.sin(u) + Math.sin(ta) * Math.sin(tb) * tr,
+             K * Math.sin(1.5 * u) * .5 + Math.cos(tb) * tr], i * 3);
+      // C — phone: body outline, island, icon grid
+      const W = 1.5, H = 3.1, cr = .32, pick = rnd();
+      let px, py, pz = 0;
+      if (pick < .42) { // rounded-rect perimeter (front & back)
+        const per = 2 * (W - 2 * cr) + 2 * (H - 2 * cr) + TAU * cr;
+        let d = rnd() * per;
+        const sx = W - 2 * cr, sy = H - 2 * cr;
+        if (d < sx) { px = -sx / 2 + d; py = H / 2; }
+        else if ((d -= sx) < sy) { px = W / 2; py = sy / 2 - d; }
+        else if ((d -= sy) < sx) { px = sx / 2 - d; py = -H / 2; }
+        else if ((d -= sx) < sy) { px = -W / 2; py = -sy / 2 + d; }
+        else { d -= sy; const q = Math.floor(d / (TAU * cr / 4)), a = (d % (TAU * cr / 4)) / cr + q * Math.PI / 2;
+          const cx = [sx / 2, sx / 2, -sx / 2, -sx / 2][q], cy = [sy / 2, -sy / 2, -sy / 2, sy / 2][q];
+          px = cx + Math.cos(Math.PI / 2 - a) * cr; py = cy + Math.sin(Math.PI / 2 - a) * cr; }
+        pz = rnd() < .7 ? .08 : -.08;
+      } else if (pick < .48) { // dynamic island
+        px = (rnd() - .5) * .42; py = H / 2 - .22 + (rnd() - .5) * .08; pz = .08;
+      } else { // app icons 4 x 5 + dock
+        const col = Math.floor(rnd() * 4), row = Math.floor(rnd() * 6), sz = .22;
+        px = -.51 + col * .34 + (rnd() - .5) * sz;
+        py = (row === 5 ? -1.2 : .98 - row * .38) + (rnd() - .5) * sz;
+        pz = .08;
+      }
+      C.set([px * .88, py * .88, pz + (rnd() - .5) * .02], i * 3);
+      // D — spiral galaxy
+      const gr = Math.pow(rnd(), .75) * 2.6, arm = (i % 3) / 3 * TAU, spin = gr * 1.9;
+      const jx = Math.pow(rnd(), 3) * (rnd() < .5 ? 1 : -1) * .45, jy = Math.pow(rnd(), 3) * (rnd() < .5 ? 1 : -1) * .25, jz = Math.pow(rnd(), 3) * (rnd() < .5 ? 1 : -1) * .45;
+      const gx = Math.cos(arm + spin) * gr + jx, gy = jy, gz = Math.sin(arm + spin) * gr + jz;
+      const tilt = .95;
+      D.set([gx, gy * Math.cos(tilt) - gz * Math.sin(tilt), gy * Math.sin(tilt) + gz * Math.cos(tilt)], i * 3);
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(A, 3));
+    geo.setAttribute('aB', new THREE.BufferAttribute(B, 3));
+    geo.setAttribute('aC', new THREE.BufferAttribute(C, 3));
+    geo.setAttribute('aD', new THREE.BufferAttribute(D, 3));
+    geo.setAttribute('aRand', new THREE.BufferAttribute(R, 1));
+    const mu = { uTime: { value: 0 }, uMorph: { value: 0 }, uPR: { value: PR }, uSize: { value: mobile ? 15 : 17 } };
+    const pts = new THREE.Points(geo, new THREE.ShaderMaterial({
+      uniforms: mu, transparent: true, depthWrite: false,
+      vertexShader: NOISE + `
+        uniform float uTime, uMorph, uPR, uSize;
+        attribute vec3 aB, aC, aD; attribute float aRand;
+        varying vec3 vCol; varying float vA;
+        vec3 shape(float k){ return k < .5 ? position : k < 1.5 ? aB : k < 2.5 ? aC : aD; }
+        void main(){
+          float seg = min(floor(uMorph), 2.), f = uMorph - seg;
+          float t = smoothstep(0., 1., clamp((f - aRand * .35) / .65, 0., 1.));
+          vec3 p = mix(shape(seg), shape(seg + 1.), t);
+          float swirl = sin(t * 3.14159);
+          p += vec3(snoise(p * .9 + uTime * .3), snoise(p * .9 + 7.3 + uTime * .3), snoise(p * .9 - 3.1 + uTime * .3)) * (swirl * .9 + .025);
+          vec4 mv = modelViewMatrix * vec4(p, 1.);
+          gl_PointSize = uSize * (.55 + aRand * .9) * uPR / -mv.z * (1. + swirl * .4);
+          gl_Position = projectionMatrix * mv;
+          vCol = brand(aRand * .55 + p.y * .07 + p.x * .04 + uTime * .02);
+          vA = .55 + .45 * smoothstep(-2.5, 2., mv.z + 7.);
+        }`,
+      fragmentShader: `
+        varying vec3 vCol; varying float vA;
+        void main(){ float d = length(gl_PointCoord - .5); if(d > .5) discard;
+          gl_FragColor = vec4(vCol, smoothstep(.5, .15, d) * vA); }`,
+    }));
+    const group = new THREE.Group(); group.add(pts); morph.scene.add(group);
+
+    const mcaps = [...document.querySelectorAll('.mcap')], rail = [...document.querySelectorAll('#mrail i')];
+    let capIdx = 0, mSmooth = 0;
+    morph.update = (t, dt) => {
+      const mp = progressOf(morphEl);
+      const u = map(mp, .06, .94) * 3;
+      const target = Math.min(3, Math.floor(u) + sstep(.3, .8, u - Math.floor(u)));
+      mSmooth += (target - mSmooth) * (reduce ? 1 : Math.min(1, dt * 6));
+      mu.uMorph.value = mSmooth; mu.uTime.value = t;
+      const fit = Math.min(1, morph.camera.aspect * 1.25);
+      group.scale.setScalar(fit * (mobile ? .9 : 1));
+      group.position.y = mobile ? .55 : .42;
+      group.rotation.y = mSmooth * Math.PI * 2 + Math.sin(t * .35) * .25 + ptr.x * .35;
+      group.rotation.x = Math.sin(t * .27) * .08 - ptr.y * .2;
+      const idx = Math.round(mSmooth);
+      if (idx !== capIdx) { capIdx = idx; mcaps.forEach((c, i) => c.classList.toggle('on', i === idx)); rail.forEach((r, i) => r.classList.toggle('on', i === idx)); }
+    };
+  } catch (e) { document.documentElement.classList.add('no3d'); morph = null; }
+
+  /* ---------- loop ---------- */
+  const stages = [hero, morph].filter(Boolean);
+  addEventListener('resize', () => stages.forEach(s => s.resize()));
+  const clock = new THREE.Clock();
+  (function loop() {
+    const dt = Math.min(clock.getDelta(), .05), t = clock.elapsedTime * (reduce ? .2 : 1);
+    ptr.x += (ptr.tx - ptr.x) * .06; ptr.y += (ptr.ty - ptr.y) * .06; ptr.vel *= .94;
+    for (const s of stages) if (s.visible) { s.update(t, dt); s.renderer.render(s.scene, s.camera); }
+    requestAnimationFrame(loop);
+  })();
+}
+</script>
+</body>
+</html>
