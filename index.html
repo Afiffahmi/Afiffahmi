@@ -94,6 +94,7 @@
   .hero-title { font-size: clamp(64px, 14vw, 200px); font-weight: 800; letter-spacing: -.055em; line-height: .92; }
   .hero-title span { display: inline-block; opacity: 0; transform: translateY(40px); filter: blur(12px); animation: rise 1.2s var(--ease) forwards; }
   .hero-title span:nth-child(2) { animation-delay: .12s; }
+  .hero-sub, .eyebrow { text-shadow: 0 0 18px rgba(255,255,255,.9), 0 0 4px rgba(255,255,255,.8); }
   .hero-sub { margin-top: 26px; font-size: clamp(19px, 2.4vw, 30px); font-weight: 500; color: var(--ink-2); letter-spacing: -.02em; opacity: 0; animation: rise 1.2s .35s var(--ease) forwards; }
   @keyframes rise { to { opacity: 1; transform: none; filter: none; } }
   .scroll-hint { position: absolute; bottom: 34px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 10px; opacity: 0; animation: rise 1s 1s var(--ease) forwards; }
@@ -311,6 +312,27 @@
   .foot a:hover { color: var(--ink); }
   .foot nav { display: flex; gap: 20px; }
 
+
+  /* ---------- Three.js ---------- */
+  .gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
+  #heroGL { opacity: 0; transition: opacity 1.6s var(--ease); }
+  #heroGL.ready { opacity: 1; }
+  #morph { height: 520vh; }
+  #morph .sticky { background: radial-gradient(80% 60% at 50% 45%, #ffffff 0%, var(--bg) 60%, #f1f1f6 100%); }
+  .morph-head { position: absolute; top: 88px; left: 0; right: 0; width: min(1080px, 100% - 32px); margin: 0 auto; z-index: 2; }
+  .morph-head .k { font-size: 17px; font-weight: 600; color: var(--muted); }
+  .mcaps { position: absolute; left: 0; right: 0; bottom: 9vh; height: 150px; z-index: 2; pointer-events: none; }
+  .mcap { position: absolute; inset: 0; text-align: center; padding: 0 16px; opacity: 0; transform: translateY(24px); filter: blur(8px);
+    transition: opacity .8s var(--ease), transform .9s var(--ease), filter .8s var(--ease); }
+  .mcap.on { opacity: 1; transform: none; filter: none; }
+  .mcap .n { font-size: 13px; font-weight: 600; letter-spacing: .12em; color: var(--muted); }
+  .mcap h3 { font-size: clamp(44px, 7vw, 92px); font-weight: 800; letter-spacing: -.05em; line-height: 1; margin-top: 6px; }
+  .mcap p { margin-top: 10px; color: var(--muted); font-size: clamp(16px, 1.6vw, 20px); }
+  .mrail { position: absolute; right: max(16px, calc(50% - 540px)); top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 10px; z-index: 2; }
+  .mrail i { width: 6px; height: 6px; border-radius: 99px; background: var(--faint); transition: height .5s var(--ease), background .5s; }
+  .mrail i.on { height: 26px; background: var(--ink); }
+  .no3d #morph { display: none; }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .001ms !important; animation-delay: 0s !important; transition-duration: .001ms !important; }
   }
@@ -323,6 +345,7 @@
     <a href="#top" class="logo">Afif Fahmi</a>
     <nav class="nav-links">
       <a href="#hero-apps">Craft</a>
+      <a href="#morph">Process</a>
       <a href="#work">Work</a>
       <a href="#toolkit">Toolkit</a>
       <a href="#about">About</a>
@@ -340,6 +363,7 @@
       <div class="orb a" data-orb="1"></div>
       <div class="orb b" data-orb="-1"></div>
       <div class="orb c" data-orb="1.4"></div>
+      <canvas class="gl" id="heroGL" aria-hidden="true"></canvas>
 
       <div class="hero-copy" id="heroCopy">
         <div class="eyebrow"><span class="dot"></span>Indie Mobile Developer</div>
@@ -422,6 +446,21 @@
   <section class="scene" id="statement">
     <div class="sticky">
       <p class="statement" id="statementText">I'm Afif, an indie developer who believes great software should feel *effortless.* I sweat the small details — the spring of a button, the rhythm of a scroll — so every app feels *crafted,* not just coded.</p>
+    </div>
+  </section>
+
+  <!-- ============ MORPH (three.js particles) ============ -->
+  <section class="scene" id="morph">
+    <div class="sticky">
+      <canvas class="gl" id="morphGL" aria-hidden="true"></canvas>
+      <div class="morph-head"><div class="k">How I work</div></div>
+      <div class="mrail" id="mrail"><i class="on"></i><i></i><i></i><i></i></div>
+      <div class="mcaps">
+        <div class="mcap on" data-m="0"><div class="n">01</div><h3>Imagine<span class="grad">.</span></h3><p>Every app starts as a single spark.</p></div>
+        <div class="mcap" data-m="1"><div class="n">02</div><h3>Design<span class="grad">.</span></h3><p>Shaped and reshaped until it feels inevitable.</p></div>
+        <div class="mcap" data-m="2"><div class="n">03</div><h3>Build<span class="grad">.</span></h3><p>Engineered for the device in your hand.</p></div>
+        <div class="mcap" data-m="3"><div class="n">04</div><h3>Ship<span class="grad">.</span></h3><p>Out into the world — then iterate.</p></div>
+      </div>
     </div>
   </section>
 
@@ -725,6 +764,283 @@
   layout();
   requestAnimationFrame(frame);
 })();
+</script>
+<script type="module">
+/* ================= Three.js: liquid pearl hero + particle morph ================= */
+const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js';
+let THREE;
+try { THREE = await import(THREE_URL); } catch (e) { document.documentElement.classList.add('no3d'); }
+
+if (THREE) {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const map = (v, a, b) => clamp((v - a) / (b - a));
+  const ease = t => 1 - Math.pow(1 - t, 3);
+  const sstep = (a, b, x) => { const t = clamp((x - a) / (b - a)); return t * t * (3 - 2 * t); };
+  const progressOf = el => { const r = el.getBoundingClientRect(); return clamp(-r.top / (el.offsetHeight - innerHeight || 1)); };
+  const PR = Math.min(devicePixelRatio || 1, 2);
+  const mobile = innerWidth < 700;
+
+  const NOISE = `
+  vec3 mod289(vec3 x){return x-floor(x*(1./289.))*289.;}
+  vec4 mod289(vec4 x){return x-floor(x*(1./289.))*289.;}
+  vec4 permute(vec4 x){return mod289(((x*34.)+1.)*x);}
+  vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-.85373472095314*r;}
+  float snoise(vec3 v){
+    const vec2 C=vec2(1./6.,1./3.); const vec4 D=vec4(0.,.5,1.,2.);
+    vec3 i=floor(v+dot(v,C.yyy)); vec3 x0=v-i+dot(i,C.xxx);
+    vec3 g=step(x0.yzx,x0.xyz); vec3 l=1.-g; vec3 i1=min(g.xyz,l.zxy); vec3 i2=max(g.xyz,l.zxy);
+    vec3 x1=x0-i1+C.xxx; vec3 x2=x0-i2+C.yyy; vec3 x3=x0-D.yyy;
+    i=mod289(i);
+    vec4 p=permute(permute(permute(i.z+vec4(0.,i1.z,i2.z,1.))+i.y+vec4(0.,i1.y,i2.y,1.))+i.x+vec4(0.,i1.x,i2.x,1.));
+    float n_=.142857142857; vec3 ns=n_*D.wyz-D.xzx;
+    vec4 j=p-49.*floor(p*ns.z*ns.z); vec4 x_=floor(j*ns.z); vec4 y_=floor(j-7.*x_);
+    vec4 x=x_*ns.x+ns.yyyy; vec4 y=y_*ns.x+ns.yyyy; vec4 h=1.-abs(x)-abs(y);
+    vec4 b0=vec4(x.xy,y.xy); vec4 b1=vec4(x.zw,y.zw);
+    vec4 s0=floor(b0)*2.+1.; vec4 s1=floor(b1)*2.+1.; vec4 sh=-step(h,vec4(0.));
+    vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy; vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
+    vec3 p0=vec3(a0.xy,h.x); vec3 p1=vec3(a0.zw,h.y); vec3 p2=vec3(a1.xy,h.z); vec3 p3=vec3(a1.zw,h.w);
+    vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));
+    p0*=norm.x; p1*=norm.y; p2*=norm.z; p3*=norm.w;
+    vec4 m=max(.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.); m=m*m;
+    return 42.*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
+  }
+  vec3 brand(float t){
+    t=fract(t)*4.;
+    vec3 c1=vec3(.0,.44,.89), c2=vec3(.48,.36,1.), c3=vec3(1.,.36,.54), c4=vec3(1.,.62,.04);
+    if(t<1.) return mix(c1,c2,smoothstep(0.,1.,t));
+    if(t<2.) return mix(c2,c3,smoothstep(1.,2.,t));
+    if(t<3.) return mix(c3,c4,smoothstep(2.,3.,t));
+    return mix(c4,c1,smoothstep(3.,4.,t));
+  }`;
+
+  function makeStage(canvas, fov, z) {
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
+    renderer.setPixelRatio(PR);
+    renderer.setClearColor(0x000000, 0);
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(fov, 1, .1, 100);
+    camera.position.z = z;
+    const st = { renderer, scene, camera, visible: false, w: 0, h: 0 };
+    st.resize = () => {
+      const r = canvas.parentElement.getBoundingClientRect();
+      st.w = r.width; st.h = r.height;
+      renderer.setSize(r.width, r.height, false);
+      camera.aspect = r.width / r.height; camera.updateProjectionMatrix();
+    };
+    new IntersectionObserver(([e]) => st.visible = e.isIntersecting).observe(canvas.parentElement.parentElement);
+    st.resize();
+    return st;
+  }
+
+  // shared pointer (normalised, smoothed)
+  const ptr = { x: 0, y: 0, tx: 0, ty: 0, vel: 0 };
+  addEventListener('pointermove', e => {
+    const nx = e.clientX / innerWidth * 2 - 1, ny = -(e.clientY / innerHeight * 2 - 1);
+    ptr.vel = Math.min(1, ptr.vel + Math.hypot(nx - ptr.tx, ny - ptr.ty) * 2.5);
+    ptr.tx = nx; ptr.ty = ny;
+  }, { passive: true });
+
+  /* ---------- 1. Hero: liquid iridescent pearl ---------- */
+  const heroEl = document.getElementById('hero');
+  const heroCanvas = document.getElementById('heroGL');
+  let hero;
+  try {
+    hero = makeStage(heroCanvas, 35, 6);
+    const uniforms = { uTime: { value: 0 }, uAmp: { value: .2 }, uFreq: { value: 1.15 } };
+    const mat = new THREE.ShaderMaterial({
+      uniforms,
+      vertexShader: NOISE + `
+        uniform float uTime, uAmp, uFreq;
+        varying vec3 vN; varying vec3 vW; varying float vD;
+        float disp(vec3 p){ return snoise(p*uFreq + vec3(uTime*.22)) * uAmp + snoise(p*uFreq*2.3 - vec3(uTime*.17)) * uAmp * .28; }
+        vec3 dpos(vec3 d){ return d * (1. + disp(d)); }
+        void main(){
+          vec3 dir = normalize(position);
+          vec3 t = normalize(cross(dir, abs(dir.y) < .99 ? vec3(0.,1.,0.) : vec3(1.,0.,0.)));
+          vec3 b = cross(dir, t);
+          float e = .012;
+          vec3 p = dpos(dir);
+          vec3 n = normalize(cross(dpos(normalize(dir + t*e)) - p, dpos(normalize(dir + b*e)) - p));
+          vD = disp(dir);
+          vec4 w = modelMatrix * vec4(p, 1.);
+          vW = w.xyz; vN = normalize(mat3(modelMatrix) * n);
+          gl_Position = projectionMatrix * viewMatrix * w;
+        }`,
+      fragmentShader: NOISE + `
+        uniform float uTime;
+        varying vec3 vN; varying vec3 vW; varying float vD;
+        void main(){
+          vec3 n = normalize(vN), v = normalize(cameraPosition - vW);
+          float ndv = max(dot(n, v), 0.);
+          float fr = pow(1. - ndv, 2.4);
+          vec3 L = normalize(vec3(-.5, .9, .7));
+          float diff = max(dot(n, L), 0.);
+          float spec = pow(max(dot(n, normalize(L + v)), 0.), 90.);
+          float spec2 = pow(max(dot(n, normalize(normalize(vec3(.7,-.4,.6)) + v)), 0.), 24.) * .25;
+          vec3 irid = brand(ndv * .85 + vD * 1.6 + n.y * .25 + uTime * .03);
+          vec3 base = vec3(.975, .975, .99);
+          vec3 col = mix(base, irid, .16 + fr * .78);
+          col *= .84 + .16 * diff;
+          col += spec * .95 + spec2;
+          gl_FragColor = vec4(col, 1.);
+        }`,
+    });
+    const blob = new THREE.Mesh(new THREE.IcosahedronGeometry(1, mobile ? 40 : 64), mat);
+    hero.scene.add(blob);
+
+    // halo ring of tiny satellites
+    const satN = 140, satPos = new Float32Array(satN * 3), satRnd = new Float32Array(satN);
+    for (let i = 0; i < satN; i++) {
+      const a = Math.random() * Math.PI * 2, r = 1.7 + Math.random() * .9;
+      satPos.set([Math.cos(a) * r, (Math.random() - .5) * .5, Math.sin(a) * r], i * 3); satRnd[i] = Math.random();
+    }
+    const satGeo = new THREE.BufferGeometry();
+    satGeo.setAttribute('position', new THREE.BufferAttribute(satPos, 3));
+    satGeo.setAttribute('aRand', new THREE.BufferAttribute(satRnd, 1));
+    const sats = new THREE.Points(satGeo, new THREE.ShaderMaterial({
+      transparent: true, depthWrite: false,
+      uniforms: { uTime: uniforms.uTime, uPR: { value: PR } },
+      vertexShader: NOISE + `uniform float uTime, uPR; attribute float aRand; varying float vR;
+        void main(){ vR = aRand; vec4 mv = modelViewMatrix * vec4(position + vec3(0., sin(uTime*.8 + aRand*20.)*.08, 0.), 1.);
+        gl_PointSize = (6. + aRand*10.) * uPR / -mv.z; gl_Position = projectionMatrix * mv; }`,
+      fragmentShader: NOISE + `varying float vR; void main(){ float d = length(gl_PointCoord - .5); if(d > .5) discard;
+        gl_FragColor = vec4(brand(vR), smoothstep(.5, .1, d) * .75); }`,
+    }));
+    sats.rotation.x = .35;
+    hero.scene.add(sats);
+
+    hero.update = (t, dt) => {
+      const hp = progressOf(heroEl);
+      const intro = ease(map(hp, 0, .2)), out = ease(map(hp, .9, 1));
+      const visW = 2 * hero.camera.position.z * Math.tan(THREE.MathUtils.degToRad(hero.camera.fov / 2)) * hero.camera.aspect;
+      const s = Math.min(.98, visW * .33) * (1 - intro * .3);
+      blob.scale.setScalar(s); sats.scale.setScalar(s);
+      uniforms.uTime.value = t;
+      uniforms.uAmp.value += ((.2 + ptr.vel * .22 + intro * .06) - uniforms.uAmp.value) * .06;
+      blob.rotation.y += dt * .12;
+      blob.rotation.x = hp * 2.4 + ptr.y * .25;
+      blob.rotation.z = ptr.x * .2;
+      blob.position.set(ptr.x * .12, ptr.y * .08 - intro * .1, 0);
+      sats.rotation.y += dt * .18;
+      sats.position.copy(blob.position);
+      heroCanvas.style.opacity = heroCanvas.classList.contains('ready') ? 1 - out : '';
+    };
+    requestAnimationFrame(() => heroCanvas.classList.add('ready'));
+  } catch (e) { heroCanvas.remove(); hero = null; }
+
+  /* ---------- 2. Morph: particles that become ideas ---------- */
+  const morphEl = document.getElementById('morph');
+  let morph;
+  try {
+    morph = makeStage(document.getElementById('morphGL'), 40, 7);
+    const N = mobile ? 9000 : 16000;
+    const A = new Float32Array(N * 3), B = new Float32Array(N * 3), C = new Float32Array(N * 3), D = new Float32Array(N * 3), R = new Float32Array(N);
+    const rnd = Math.random, TAU = Math.PI * 2;
+    for (let i = 0; i < N; i++) {
+      R[i] = rnd();
+      // A — sphere (fibonacci shell)
+      const y = 1 - (i / (N - 1)) * 2, rr = Math.sqrt(1 - y * y), th = i * 2.399963, sr = 1.6 + (rnd() - .5) * .06;
+      A.set([Math.cos(th) * rr * sr, y * sr, Math.sin(th) * rr * sr], i * 3);
+      // B — torus knot (2,3)
+      const u = rnd() * TAU * 2, cs = Math.cos(1.5 * u), K = 1.05;
+      const tr = .2 * Math.sqrt(rnd()), ta = rnd() * TAU, tb = rnd() * TAU;
+      B.set([K * (2 + cs) * .5 * Math.cos(u) + Math.cos(ta) * Math.sin(tb) * tr,
+             K * (2 + cs) * .5 * Math.sin(u) + Math.sin(ta) * Math.sin(tb) * tr,
+             K * Math.sin(1.5 * u) * .5 + Math.cos(tb) * tr], i * 3);
+      // C — phone: body outline, island, icon grid
+      const W = 1.5, H = 3.1, cr = .32, pick = rnd();
+      let px, py, pz = 0;
+      if (pick < .42) { // rounded-rect perimeter (front & back)
+        const per = 2 * (W - 2 * cr) + 2 * (H - 2 * cr) + TAU * cr;
+        let d = rnd() * per;
+        const sx = W - 2 * cr, sy = H - 2 * cr;
+        if (d < sx) { px = -sx / 2 + d; py = H / 2; }
+        else if ((d -= sx) < sy) { px = W / 2; py = sy / 2 - d; }
+        else if ((d -= sy) < sx) { px = sx / 2 - d; py = -H / 2; }
+        else if ((d -= sx) < sy) { px = -W / 2; py = -sy / 2 + d; }
+        else { d -= sy; const q = Math.floor(d / (TAU * cr / 4)), a = (d % (TAU * cr / 4)) / cr + q * Math.PI / 2;
+          const cx = [sx / 2, sx / 2, -sx / 2, -sx / 2][q], cy = [sy / 2, -sy / 2, -sy / 2, sy / 2][q];
+          px = cx + Math.cos(Math.PI / 2 - a) * cr; py = cy + Math.sin(Math.PI / 2 - a) * cr; }
+        pz = rnd() < .7 ? .08 : -.08;
+      } else if (pick < .48) { // dynamic island
+        px = (rnd() - .5) * .42; py = H / 2 - .22 + (rnd() - .5) * .08; pz = .08;
+      } else { // app icons 4 x 5 + dock
+        const col = Math.floor(rnd() * 4), row = Math.floor(rnd() * 6), sz = .22;
+        px = -.51 + col * .34 + (rnd() - .5) * sz;
+        py = (row === 5 ? -1.2 : .98 - row * .38) + (rnd() - .5) * sz;
+        pz = .08;
+      }
+      C.set([px * .88, py * .88, pz + (rnd() - .5) * .02], i * 3);
+      // D — spiral galaxy
+      const gr = Math.pow(rnd(), .75) * 2.6, arm = (i % 3) / 3 * TAU, spin = gr * 1.9;
+      const jx = Math.pow(rnd(), 3) * (rnd() < .5 ? 1 : -1) * .45, jy = Math.pow(rnd(), 3) * (rnd() < .5 ? 1 : -1) * .25, jz = Math.pow(rnd(), 3) * (rnd() < .5 ? 1 : -1) * .45;
+      const gx = Math.cos(arm + spin) * gr + jx, gy = jy, gz = Math.sin(arm + spin) * gr + jz;
+      const tilt = .95;
+      D.set([gx, gy * Math.cos(tilt) - gz * Math.sin(tilt), gy * Math.sin(tilt) + gz * Math.cos(tilt)], i * 3);
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(A, 3));
+    geo.setAttribute('aB', new THREE.BufferAttribute(B, 3));
+    geo.setAttribute('aC', new THREE.BufferAttribute(C, 3));
+    geo.setAttribute('aD', new THREE.BufferAttribute(D, 3));
+    geo.setAttribute('aRand', new THREE.BufferAttribute(R, 1));
+    const mu = { uTime: { value: 0 }, uMorph: { value: 0 }, uPR: { value: PR }, uSize: { value: mobile ? 15 : 17 } };
+    const pts = new THREE.Points(geo, new THREE.ShaderMaterial({
+      uniforms: mu, transparent: true, depthWrite: false,
+      vertexShader: NOISE + `
+        uniform float uTime, uMorph, uPR, uSize;
+        attribute vec3 aB, aC, aD; attribute float aRand;
+        varying vec3 vCol; varying float vA;
+        vec3 shape(float k){ return k < .5 ? position : k < 1.5 ? aB : k < 2.5 ? aC : aD; }
+        void main(){
+          float seg = min(floor(uMorph), 2.), f = uMorph - seg;
+          float t = smoothstep(0., 1., clamp((f - aRand * .35) / .65, 0., 1.));
+          vec3 p = mix(shape(seg), shape(seg + 1.), t);
+          float swirl = sin(t * 3.14159);
+          p += vec3(snoise(p * .9 + uTime * .3), snoise(p * .9 + 7.3 + uTime * .3), snoise(p * .9 - 3.1 + uTime * .3)) * (swirl * .9 + .025);
+          vec4 mv = modelViewMatrix * vec4(p, 1.);
+          gl_PointSize = uSize * (.55 + aRand * .9) * uPR / -mv.z * (1. + swirl * .4);
+          gl_Position = projectionMatrix * mv;
+          vCol = brand(aRand * .55 + p.y * .07 + p.x * .04 + uTime * .02);
+          vA = .55 + .45 * smoothstep(-2.5, 2., mv.z + 7.);
+        }`,
+      fragmentShader: `
+        varying vec3 vCol; varying float vA;
+        void main(){ float d = length(gl_PointCoord - .5); if(d > .5) discard;
+          gl_FragColor = vec4(vCol, smoothstep(.5, .15, d) * vA); }`,
+    }));
+    const group = new THREE.Group(); group.add(pts); morph.scene.add(group);
+
+    const mcaps = [...document.querySelectorAll('.mcap')], rail = [...document.querySelectorAll('#mrail i')];
+    let capIdx = 0, mSmooth = 0;
+    morph.update = (t, dt) => {
+      const mp = progressOf(morphEl);
+      const u = map(mp, .06, .94) * 3;
+      const target = Math.min(3, Math.floor(u) + sstep(.3, .8, u - Math.floor(u)));
+      mSmooth += (target - mSmooth) * (reduce ? 1 : Math.min(1, dt * 6));
+      mu.uMorph.value = mSmooth; mu.uTime.value = t;
+      const fit = Math.min(1, morph.camera.aspect * 1.25);
+      group.scale.setScalar(fit * (mobile ? .9 : 1));
+      group.position.y = mobile ? .55 : .42;
+      group.rotation.y = mSmooth * Math.PI * 2 + Math.sin(t * .35) * .25 + ptr.x * .35;
+      group.rotation.x = Math.sin(t * .27) * .08 - ptr.y * .2;
+      const idx = Math.round(mSmooth);
+      if (idx !== capIdx) { capIdx = idx; mcaps.forEach((c, i) => c.classList.toggle('on', i === idx)); rail.forEach((r, i) => r.classList.toggle('on', i === idx)); }
+    };
+  } catch (e) { document.documentElement.classList.add('no3d'); morph = null; }
+
+  /* ---------- loop ---------- */
+  const stages = [hero, morph].filter(Boolean);
+  addEventListener('resize', () => stages.forEach(s => s.resize()));
+  const clock = new THREE.Clock();
+  (function loop() {
+    const dt = Math.min(clock.getDelta(), .05), t = clock.elapsedTime * (reduce ? .2 : 1);
+    ptr.x += (ptr.tx - ptr.x) * .06; ptr.y += (ptr.ty - ptr.y) * .06; ptr.vel *= .94;
+    for (const s of stages) if (s.visible) { s.update(t, dt); s.renderer.render(s.scene, s.camera); }
+    requestAnimationFrame(loop);
+  })();
+}
 </script>
 </body>
 </html>
